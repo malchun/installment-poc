@@ -1,0 +1,18 @@
+server:
+    port: 3031
+spring:
+    main:
+        allow-bean-definition-overriding: true
+    application:
+        name: installment-poc-test
+    temporal:
+        namespace: default
+        connection:
+            target: localhost:7233
+        workersAutoDiscovery:
+            packages: org.malchun.installmentpoc
+        test-server:
+            enabled: true
+
+logging.level.com.malchun.installmentpoc: DEBUG
+logging.level.ROOT: INFO
