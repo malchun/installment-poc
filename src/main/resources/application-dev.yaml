@@ -1,8 +1,8 @@
 server:
   port: 3031
 installmentpoc:
-  faultchance: 0
-  fatalfaultchance: 0.5
+  faultchance: ${FAUT_CHANCE:-0}
+  fatalfaultchance: ${FATAL_FAULT_CHANCE:-0}
 spring:
   main:
     allow-bean-definition-overriding: true

@@ -9,5 +9,5 @@ import java.util.List;
 @ActivityInterface
 public interface CalculatePlannedChargeActivity {
 
-    List<PlannedCharge> calculatePlannedCharge(BigDecimal totalAmount, int numberOfInstallments, int intervalInSeconds);
+    List<PlannedCharge> calculatePlannedCharge(BigDecimal totalAmount, BigDecimal downPaymentAmount, int numberOfInstallments, int intervalInSeconds);
 }

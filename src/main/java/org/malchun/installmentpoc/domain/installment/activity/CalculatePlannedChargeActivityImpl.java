@@ -19,10 +19,13 @@ import static org.malchun.installmentpoc.domain.installment.utility.InstallmentC
 @Service
 public class CalculatePlannedChargeActivityImpl implements CalculatePlannedChargeActivity {
     @Override
-    public List<PlannedCharge> calculatePlannedCharge(BigDecimal totalAmount, int numberOfCharges, int intervalInSeconds) {
+    public List<PlannedCharge> calculatePlannedCharge(BigDecimal totalAmount, BigDecimal downPaymentAmount, int numberOfCharges, int intervalInSeconds) {
+        BigDecimal totalChargesAmount = totalAmount.subtract(downPaymentAmount);
+        PlannedCharge downPaymentCharge = new PlannedCharge(Instant.now(), downPaymentAmount);
         Duration durationBetweenCharges = Duration.ofSeconds(intervalInSeconds);
-        BigDecimal chargeAmount = totalAmount.divide(BigDecimal.valueOf(numberOfCharges), RoundingMode.HALF_UP);;
+        BigDecimal chargeAmount = totalChargesAmount.divide(BigDecimal.valueOf(numberOfCharges), RoundingMode.HALF_UP);;
         List<PlannedCharge> plannedCharges = new ArrayList<>();
+        plannedCharges.add(downPaymentCharge);
         for (int i = 1; i <= numberOfCharges; i++) {
             plannedCharges.add(new PlannedCharge(Instant.now().plus(durationBetweenCharges.multipliedBy(i)), chargeAmount));
         }

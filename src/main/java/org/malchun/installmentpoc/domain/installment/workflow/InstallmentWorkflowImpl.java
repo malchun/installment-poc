@@ -99,17 +99,14 @@ public class InstallmentWorkflowImpl implements InstallmentWorkflow {
 
     private ChargeActivityResult processCharge(Integer chargeIndex, String customerId, PlannedCharge plannedCharge) {
         log.debug("Process starting");
-        Workflow.sleep(Duration.between(Instant.now(), plannedCharge.getChargeAt()));
+        var calculateSleepTime = Duration.between(Instant.now(), plannedCharge.getChargeAt());
+        var sleepTime = calculateSleepTime.toMillis() > 0 ? calculateSleepTime : Duration.ofMillis(1);
+        Workflow.sleep(sleepTime);
         return chargeActivity.process(new ChargeActivityParameters(chargeIndex, customerId, plannedCharge.getAmount()));
     }
 
     private InstallmentWorkflowState calculateInitialChargeWorkflowState(InstallmentWorkflowParameters parameters) {
-        BigDecimal chargesAmount = parameters.getTotalPrice().subtract(parameters.getDownPaymentAmount());
-        PlannedCharge downPaymentCharge = new PlannedCharge(Instant.now(), parameters.getDownPaymentAmount());
-        List<PlannedCharge> plannedCharges = new ArrayList<>();
-        plannedCharges.add(downPaymentCharge);
-        plannedCharges.addAll(calculateActivity.calculatePlannedCharge(chargesAmount, parameters.getNumberOfPayments(), parameters.getPaymentIntervalInSeconds()));
-
+        List<PlannedCharge> plannedCharges = calculateActivity.calculatePlannedCharge(parameters.getTotalPrice(), parameters.getDownPaymentAmount(), parameters.getNumberOfPayments(), parameters.getPaymentIntervalInSeconds());
         return new InstallmentWorkflowState(parameters, plannedCharges, new ArrayList<>());
     }
 }

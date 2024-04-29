@@ -42,7 +42,7 @@ services:
       - TEMPORAL_ADDRESS=temporal:7233
       - TEMPORAL_CORS_ORIGINS=http://localhost:3000\
       - TEMPORAL_TLS_ENABLE_HOST_VERIFICATION=false
-    image: temporalio/ui:0.15.1
+    image: temporalio/ui:2.26.2
     networks:
       - installment-network
     ports:

@@ -16,6 +16,8 @@ services:
       - POSTGRES_USER=temporal
       - POSTGRES_PASSWORD=temporal
       - POSTGRES_DB=temporal
+      - FAULT_CHANCE=0.5
+      - FATAL_FAULT_CHANCE=0.2
 
 networks:
   proxyapp-network:
